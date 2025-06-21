@@ -1,0 +1,99 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New Message from Admin</title>
+    <style type="text/css">
+      /* Reset & basic styles */ * { box-sizing: border-box; } body { margin: 0;
+      padding: 0; font-family: "Montserrat", Arial, sans-serif;
+      background-color: #f5f5f5; overflow-x: hidden; } .container { width: 100%;
+      padding: 40px 20px; text-align: center; } .email-card { width: 100%;
+      max-width: 600px; background-color: #ffffff; border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); margin: auto; overflow: hidden;
+      } .header { background-color: #2a5a3c; padding: 40px 20px; border-radius:
+      12px 12px 0 0; } .header img { width: 180px; } .header h1 { color:
+      #ffffff; margin-top: 20px; font-size: 26px; } .content { padding: 40px
+      30px; text-align: left; } .content h2 { color: #2a5a3c; font-size: 22px;
+      margin-bottom: 20px; } .content p { color: #666666; font-size: 16px;
+      line-height: 1.6; margin-bottom: 25px; } .support { background-color:
+      #f9f9f9; padding: 30px; font-size: 14px; color: #666666; text-align:
+      center; } .support a { color: #2a5a3c; font-weight: 600; text-decoration:
+      none; } .social-icons { text-align: center; margin-top: 15px; }
+      .social-icons a { display: inline-block; background-color: #2a5a3c; width:
+      40px; height: 40px; border-radius: 50%; text-align: center; line-height:
+      40px; margin: 0 10px; } .social-icons img { width: 22px; vertical-align:
+      middle; } .footer { background-color: #2a5a3c; padding: 25px;
+      border-radius: 0 0 12px 12px; color: #ffffff; font-size: 12px; text-align:
+      center; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Email Card -->
+      <div class="email-card">
+        <!-- Header -->
+        <div class="header">
+          <img
+            src="https://res.cloudinary.com/dyw5q4fzd/image/upload/v1743370108/iivyawrvogexr7ny3poc.png"
+            alt="African Market Lithuania Logo"
+          />
+          <h1>Message from Admin</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+          <h2>New Message Received</h2>
+          <p>
+            You have received a new message from
+            <strong>{{adminName}}</strong>.
+          </p>
+          <p>
+            {{message}}
+          </p>
+        </div>
+
+        <!-- Support Section -->
+        <div class="support">
+          <p>
+            If you have any questions, please reply to this email or contact us
+            at
+            <a href="mailto:Info@africanmarkets.eu">Info@africanmarkets.eu</a>.
+          </p>
+          <!-- Social Media Links -->
+          <div class="social-icons">
+            <a href="https://wa.link/835yqh" target="_blank">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+                alt="WhatsApp"
+              />
+            </a>
+            <a
+              href="https://www.instagram.com/african_market_lt"
+              target="_blank"
+            >
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+                alt="Instagram"
+              />
+            </a>
+            <a
+              href="https://www.facebook.com/share/17zsYVEi71/"
+              target="_blank"
+            >
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                alt="Facebook"
+              />
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <p>© 2023 African Market Lithuania. All rights reserved.</p>
+          <p>Vilnius, Lithuania</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
