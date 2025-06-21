@@ -34,8 +34,9 @@ const main = async () => {
     "https://afrimart-client.vercel.app",
     "https://afrimart-client-v2.vercel.app",
     "https://africanmarkets.eu",
+    "https://www.africanmarkets.eu",
     "https://admin.africanmarkets.eu",
-    "https://owner.africanmarkets.eu"
+    "https://owner.africanmarkets.eu",
   ];
   const app = express();
 
