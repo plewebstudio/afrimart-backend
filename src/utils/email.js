@@ -42,7 +42,7 @@ const { Resend } = require("resend");
 // };
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-
+("re_8iabRGgg_Huk1YXJ6BWu95BkQt5WkF4Bw");
 const resend = new Resend(RESEND_API_KEY);
 
 const sendEmail = async (
