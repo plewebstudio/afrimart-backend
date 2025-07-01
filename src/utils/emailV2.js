@@ -1,4 +1,5 @@
-const nodemailer = require("nodemailer");
+import { Resend } from "resend";
+
 const {
   welcomeEmailTemplate,
   workerEmailTemplate,
@@ -7,18 +8,8 @@ const {
   resendVerifyEmailTemplate,
   resendChangePasswordTemplate,
 } = require("../email-views/index");
-const { Resend } = require("resend");
 
 async function sendEmail({ to, useCase, username, otp, message }) {
-  // const transporter = nodemailer.createTransport({
-  //   host: "sandbox.smtp.mailtrap.io",
-  //   port: 2525,
-  //   auth: {
-  //     user: "06414813769737",
-  //     pass:"5ae0e821a75f4b"
-  //   }
-  //   });
-
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const resend = new Resend(RESEND_API_KEY);
 
@@ -55,13 +46,6 @@ async function sendEmail({ to, useCase, username, otp, message }) {
   } else if (useCase == "Resend: Forgot password") {
     template = resendChangePasswordTemplate({ otp, username, todayDate });
   }
-
-  //  await transporter.sendMail({
-  //     from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>',
-  //     to,
-  //     subject: useCase,
-  //     html: template
-  //   });
 
   await resend.emails.send({
     from: "African Market <onboarding@resend.dev>",

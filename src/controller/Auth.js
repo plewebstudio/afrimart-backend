@@ -17,6 +17,7 @@ exports.Register = async (req, res) => {
 
   const confirmEmailToken = user.generateEmailConfirmationToken();
   await user.save({ validateBeforeSave: false });
+
   console.log({
     to: user.email,
     username: user.username,
@@ -35,7 +36,7 @@ exports.Register = async (req, res) => {
     console.log(email);
   } catch (error) {
     console.error("Email sending error:", error);
-    res
+    return res
       .status(500)
       .json({ message: "Something went wrong while sending emails" });
   }
@@ -142,7 +143,7 @@ exports.forgotPassword = async (req, res, next) => {
       otp: confirmEmailURL,
     });
 
-    res.status(200).json({ success: true, data: "Email sent" });
+    return res.status(200).json({ success: true, data: "Email sent" });
   } catch (err) {
     console.log(err);
 
