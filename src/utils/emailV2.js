@@ -49,7 +49,7 @@ async function sendEmail({ to, useCase, username, otp, message }) {
 
   await resend.emails.send({
     from: "African Market <onboarding@resend.dev>",
-    to: userEmail,
+    to,
     subject,
     html: emailHtml,
   });
