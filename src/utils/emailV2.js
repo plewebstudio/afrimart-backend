@@ -38,7 +38,7 @@ async function sendEmail({ to, useCase, username, otp, message }) {
     template = workerEmailTemplate({ adminName, message });
   } else if (useCase == "Activate account") {
     template = verifyEmailTemplate({ otp, username, todayDate });
-  } else if (useCase == "Change password") {
+  } else if (useCase == "Forgot password") {
     template = changePasswordTemplate({ otp, username, todayDate });
   } else if (useCase == "Resend: Verify email") {
     template = resendVerifyEmailTemplate({ otp, username, todayDate });

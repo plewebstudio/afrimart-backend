@@ -138,7 +138,7 @@ exports.forgotPassword = async (req, res, next) => {
   try {
     await sendEmail({
       to: user.email,
-      useCase: "Change password",
+      useCase: "Forgot password",
       username: user.username,
       otp: confirmEmailURL,
     });
