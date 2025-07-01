@@ -40,7 +40,7 @@ async function sendEmail({ to, useCase, username, otp, message }) {
     template = verifyEmailTemplate({ otp, username, todayDate });
   } else if (useCase == "Forgot password") {
     template = changePasswordTemplate({ otp, username, todayDate });
-  } else if (useCase == "Resend: Verify email") {
+  } else if (useCase == "Resend: Activate account") {
     template = resendVerifyEmailTemplate({ otp, username, todayDate });
   } else if (useCase == "Resend: Forgot password") {
     template = resendChangePasswordTemplate({ otp, username, todayDate });

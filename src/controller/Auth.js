@@ -336,7 +336,7 @@ exports.resendToken = async (req, res) => {
 
       await sendEmail({
         to: user.email,
-        useCase: "Resend: Verify email",
+        useCase: "Resend: Activate account",
         username: user.username,
         otp: confirmEmailToken,
       });
