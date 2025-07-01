@@ -7,6 +7,7 @@ const {
   resendVerifyEmailTemplate,
   resendChangePasswordTemplate,
 } = require("../email-views/index");
+const { Resend } = require("resend");
 
 async function sendEmail({ to, useCase, username, otp, message }) {
   // const transporter = nodemailer.createTransport({
@@ -18,7 +19,7 @@ async function sendEmail({ to, useCase, username, otp, message }) {
   //   }
   //   });
 
-  const RESEND_API_KEY = "re_8iabRGgg_Huk1YXJ6BWu95BkQt5WkF4Bw";
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const resend = new Resend(RESEND_API_KEY);
 
   const date = new Date();
