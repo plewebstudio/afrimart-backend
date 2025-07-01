@@ -1,5 +1,4 @@
 const { Resend } = require("resend");
-
 const {
   welcomeEmailTemplate,
   workerEmailTemplate,
@@ -47,11 +46,18 @@ async function sendEmail({ to, useCase, username, otp, message }) {
     template = resendChangePasswordTemplate({ otp, username, todayDate });
   }
 
+  //  await transporter.sendMail({
+  //     from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>',
+  //     to,
+  //     subject: useCase,
+  //     html: template
+  //   });
+
   await resend.emails.send({
     from: "African Market <onboarding@resend.dev>",
-    to,
-    subject,
-    html: emailHtml,
+    to: userEmail,
+    subject: useCase,
+    html: template,
   });
 }
 
