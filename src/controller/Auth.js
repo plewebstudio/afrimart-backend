@@ -133,7 +133,7 @@ exports.forgotPassword = async (req, res, next) => {
   const token = await user.getPasswordResetToken();
   const encodedToken = encodeURIComponent(token);
   await user.save({ validateBeforeSave: false });
-  const confirmEmailURL = `https://afrimart-client-v2.vercel.app/change-password.html?token=${encodedToken}`;
+  const confirmEmailURL = `https://africanmarkets.eu/change-password.html?token=${encodedToken}`;
 
   try {
     await sendEmail({
@@ -344,7 +344,7 @@ exports.resendToken = async (req, res) => {
       const resetToken = await user.getPasswordResetToken();
       const encodedToken = encodeURIComponent(resetToken);
       await user.save({ validateBeforeSave: false });
-      const confirmEmailURL = `https://afrimart-client-v2.vercel.app/change-password.html?token=${encodedToken}`;
+      const confirmEmailURL = `https://africanmarkets.eu/change-password.html?token=${encodedToken}`;
 
       await sendEmail({
         to: user.email,
