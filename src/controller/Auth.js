@@ -114,6 +114,7 @@ exports.Login = async (req, res, next) => {
 };
 
 exports.loggedInUser = async (req, res, next) => {
+  console.log("Hello world");
   res.status(200).json({ success: true, user: req.user });
 };
 

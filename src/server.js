@@ -1,10 +1,12 @@
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config();
+//dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const { handleWebhook } = require("./webhook");
+// const { handleWebhook } = require("./webhook");
 const bodyParser = require("body-parser");
 const connectDb = require("./db/database");
 
@@ -84,11 +86,11 @@ const main = async () => {
   app.use(express.json());
   app.use(cookieParser());
 
-  app.post(
-    "/stripe-checkout",
-    bodyParser.raw({ type: "application/json" }),
-    handleWebhook
-  );
+  // app.post(
+  //   "/stripe-checkout",
+  //   bodyParser.raw({ type: "application/json" }),
+  //   handleWebhook
+  // );
 
   connectDb();
 
