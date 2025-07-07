@@ -82,7 +82,7 @@ exports.Register = async (req, res) => {
     if (err.code === 11000) {
       const duplicatedField = Object.keys(err.keyPattern)[0]; // "email" or "username"
       return res.status(400).json({
-        message: `${duplicatedField} already exists. Please choose another.`,
+        message: `${duplicatedField.toUpperCase()} already exists. Please choose another.`,
       });
     }
 
