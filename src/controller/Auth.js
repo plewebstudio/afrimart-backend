@@ -12,36 +12,88 @@ cloudinary.config({
   api_secret: process.env.cloudinary_api_secret,
 });
 
+// exports.Register = async (req, res) => {
+//   const user = await User.create(req.body);
+
+//   const confirmEmailToken = user.generateEmailConfirmationToken();
+//   await user.save({ validateBeforeSave: false });
+
+//   console.log({
+//     to: user.email,
+//     username: user.username,
+//     useCase: "Activate account",
+//     otp: confirmEmailToken,
+//   });
+
+//   try {
+//     const email = await sendEmail({
+//       to: user.email,
+//       username: user.username,
+//       useCase: "Activate account",
+//       otp: confirmEmailToken,
+//     });
+
+//     console.log(email);
+//   } catch (error) {
+//     console.error("Email sending error:", error);
+//     return res
+//       .status(500)
+//       .json({ message: "Something went wrong while sending emails" });
+//   }
+
+//   responseToken(user, 201, res, "register");
+// };
+
 exports.Register = async (req, res) => {
-  const user = await User.create(req.body);
-
-  const confirmEmailToken = user.generateEmailConfirmationToken();
-  await user.save({ validateBeforeSave: false });
-
-  console.log({
-    to: user.email,
-    username: user.username,
-    useCase: "Activate account",
-    otp: confirmEmailToken,
-  });
-
   try {
-    const email = await sendEmail({
+    const user = await User.create(req.body);
+
+    const confirmEmailToken = user.generateEmailConfirmationToken();
+    await user.save({ validateBeforeSave: false });
+
+    console.log({
       to: user.email,
       username: user.username,
       useCase: "Activate account",
       otp: confirmEmailToken,
     });
 
-    console.log(email);
-  } catch (error) {
-    console.error("Email sending error:", error);
-    return res
-      .status(500)
-      .json({ message: "Something went wrong while sending emails" });
-  }
+    try {
+      const email = await sendEmail({
+        to: user.email,
+        username: user.username,
+        useCase: "Activate account",
+        otp: confirmEmailToken,
+      });
 
-  responseToken(user, 201, res, "register");
+      console.log(email);
+    } catch (error) {
+      console.error("Email sending error:", error);
+      return res.status(500).json({
+        message: "Something went wrong while sending the confirmation email.",
+      });
+    }
+
+    responseToken(user, 201, res, "register");
+  } catch (err) {
+    console.error("Registration error:", err);
+
+    // Handle duplicate key errors (MongoDB specific)
+    if (err.code === 11000) {
+      const duplicatedField = Object.keys(err.keyPattern)[0]; // "email" or "username"
+      return res.status(400).json({
+        message: `${duplicatedField} already exists. Please choose another.`,
+      });
+    }
+
+    // Handle validation errors (optional)
+    if (err.name === "ValidationError") {
+      const messages = Object.values(err.errors).map((e) => e.message);
+      return res.status(400).json({ message: messages.join(", ") });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 exports.confirmEmail = async (req, res, next) => {
