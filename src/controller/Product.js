@@ -567,7 +567,7 @@ exports.updateProduct = async (req, res) => {
     const formData = req.body;
     const imageUrls = [];
 
-    // ✅ 1. Handle new image uploads
+    // 1. Handle new image uploads
     if (req.files && req.files.length > 0) {
       for (const image of req.files) {
         await new Promise((resolve, reject) => {
@@ -591,7 +591,7 @@ exports.updateProduct = async (req, res) => {
       }
     }
 
-    // ✅ 2. Parse removed images from frontend
+    // 2. Parse removed images from frontend
     let removedImages = [];
     if (formData.removedImages) {
       try {
@@ -601,16 +601,15 @@ exports.updateProduct = async (req, res) => {
       }
     }
 
-    // ✅ 3. Filter out removed images from existing ones
+    // 3. Filter out removed images from existing ones
     const retainedImages = product.file.filter(
       (img) => !removedImages.includes(img)
     );
 
-    // ✅ 4. Merge new images (if any) with retained ones
-    const updatedImageList =
-      imageUrls.length > 0 ? [...retainedImages, ...imageUrls] : retainedImages;
+    // 4. Merge new images with retained ones
+    const updatedImageList = [...retainedImages, ...imageUrls];
 
-    // ✅ 5. Build update object
+    // 5. Build update object
     const updatePayload = {
       ...formData,
       file: updatedImageList,
@@ -618,7 +617,7 @@ exports.updateProduct = async (req, res) => {
       category: formData.categoryId,
     };
 
-    // ✅ 6. Convert numeric fields
+    // 6. Convert numeric fields
     if (formData.BasePrice) {
       updatePayload.BasePrice = parseInt(formData.BasePrice);
     }
