@@ -467,14 +467,94 @@ exports.getProduct = async (req, res, next) => {
 //   }
 // };
 
+// exports.updateProduct = async (req, res) => {
+//   try {
+//     // Validate product existence
+//     const product = await Product.findById(req.params.id);
+//     if (!product) {
+//       return res
+//         .status(404)
+//         .json({ error: `No product found with ID: ${req.params.id}` });
+//     }
+
+//     // Authorization check
+//     if (req.user.role !== "admin") {
+//       return res
+//         .status(403)
+//         .json({ error: "You are not authorized to update products" });
+//     }
+
+//     const productId = req.params.id;
+//     const userId = req.user.id;
+//     const formData = req.body;
+//     const imageUrls = [];
+
+//     // Process new images if present
+//     if (req.files && req.files.length > 0) {
+//       for (const image of req.files) {
+//         await new Promise((resolve, reject) => {
+//           const stream = cloudinary.uploader.upload_stream(
+//             { folder: "products/" },
+//             (error, result) => {
+//               if (error) {
+//                 reject(new Error("Error uploading image to Cloudinary"));
+//                 return;
+//               }
+//               imageUrls.push(result.secure_url);
+//               resolve();
+//             }
+//           );
+
+//           const bufferStream = new Readable();
+//           bufferStream.push(image.buffer);
+//           bufferStream.push(null);
+//           bufferStream.pipe(stream);
+//         });
+//       }
+//     }
+
+//     // Update product with combined data
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       productId,
+//       {
+//         ...formData,
+//         // Only update images if new ones were added
+//         ...(imageUrls.length > 0 && {
+//           file: [...product.file, ...imageUrls],
+//         }),
+//         // Convert numerical fields
+//         ...(formData.BasePrice && { BasePrice: parseInt(formData.BasePrice) }),
+//         ...(formData.StockQuantity && {
+//           StockQuantity: parseInt(formData.StockQuantity),
+//         }),
+//         ...(formData.Discount && { Discount: parseInt(formData.Discount) }),
+//         user: userId,
+//         category: formData.categoryId,
+//       },
+//       { new: true, runValidators: true }
+//     );
+
+//     res.status(200).json({ data: updatedProduct });
+//   } catch (err) {
+//     console.error(err);
+//     const errorMessage = err.message.includes("Cloudinary")
+//       ? "Error uploading images"
+//       : "Error updating product";
+//     res.status(500).json({ error: errorMessage });
+//   }
+// };
+
 exports.updateProduct = async (req, res) => {
   try {
+    const productId = req.params.id;
+    const userId = req.user.id;
+
     // Validate product existence
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(productId);
     if (!product) {
       return res
         .status(404)
-        .json({ error: `No product found with ID: ${req.params.id}` });
+        .json({ error: `No product found with ID: ${productId}` });
     }
 
     // Authorization check
@@ -484,12 +564,10 @@ exports.updateProduct = async (req, res) => {
         .json({ error: "You are not authorized to update products" });
     }
 
-    const productId = req.params.id;
-    const userId = req.user.id;
     const formData = req.body;
     const imageUrls = [];
 
-    // Process new images if present
+    // ✅ 1. Handle new image uploads
     if (req.files && req.files.length > 0) {
       for (const image of req.files) {
         await new Promise((resolve, reject) => {
@@ -513,24 +591,47 @@ exports.updateProduct = async (req, res) => {
       }
     }
 
-    // Update product with combined data
+    // ✅ 2. Parse removed images from frontend
+    let removedImages = [];
+    if (formData.removedImages) {
+      try {
+        removedImages = JSON.parse(formData.removedImages);
+      } catch (err) {
+        console.warn("Could not parse removedImages:", err.message);
+      }
+    }
+
+    // ✅ 3. Filter out removed images from existing ones
+    const retainedImages = product.file.filter(
+      (img) => !removedImages.includes(img)
+    );
+
+    // ✅ 4. Merge new images (if any) with retained ones
+    const updatedImageList =
+      imageUrls.length > 0 ? [...retainedImages, ...imageUrls] : retainedImages;
+
+    // ✅ 5. Build update object
+    const updatePayload = {
+      ...formData,
+      file: updatedImageList,
+      user: userId,
+      category: formData.categoryId,
+    };
+
+    // ✅ 6. Convert numeric fields
+    if (formData.BasePrice) {
+      updatePayload.BasePrice = parseInt(formData.BasePrice);
+    }
+    if (formData.StockQuantity) {
+      updatePayload.StockQuantity = parseInt(formData.StockQuantity);
+    }
+    if (formData.Discount) {
+      updatePayload.Discount = parseInt(formData.Discount);
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
-      {
-        ...formData,
-        // Only update images if new ones were added
-        ...(imageUrls.length > 0 && {
-          file: [...product.file, ...imageUrls],
-        }),
-        // Convert numerical fields
-        ...(formData.BasePrice && { BasePrice: parseInt(formData.BasePrice) }),
-        ...(formData.StockQuantity && {
-          StockQuantity: parseInt(formData.StockQuantity),
-        }),
-        ...(formData.Discount && { Discount: parseInt(formData.Discount) }),
-        user: userId,
-        category: formData.categoryId,
-      },
+      updatePayload,
       { new: true, runValidators: true }
     );
 
