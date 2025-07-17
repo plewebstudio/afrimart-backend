@@ -153,9 +153,9 @@ const createProductWithImages = async (
     const newProduct = {
       name: formData.name,
       description: formData.description,
-      BasePrice: parseInt(formData.BasePrice),
+      BasePrice: parseFloat(formData.BasePrice),
       StockQuantity: parseInt(formData.StockQuantity),
-      Discount: parseInt(formData.Discount),
+      Discount: parseFloat(formData.Discount),
       DiscountType: formData.DiscountType,
       PackagingType: formData.PackagingType,
       Variants: formData.Variants,
@@ -523,11 +523,13 @@ exports.updateProduct = async (req, res) => {
           file: [...product.file, ...imageUrls],
         }),
         // Convert numerical fields
-        ...(formData.BasePrice && { BasePrice: parseInt(formData.BasePrice) }),
+        ...(formData.BasePrice && {
+          BasePrice: parseFloat(formData.BasePrice),
+        }),
         ...(formData.StockQuantity && {
           StockQuantity: parseInt(formData.StockQuantity),
         }),
-        ...(formData.Discount && { Discount: parseInt(formData.Discount) }),
+        ...(formData.Discount && { Discount: parseFloat(formData.Discount) }),
         user: userId,
         category: formData.categoryId,
       },
