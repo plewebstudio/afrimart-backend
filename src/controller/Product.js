@@ -282,7 +282,7 @@ exports.getProductsAdmin = async (req, res, next) => {
 };
 
 exports.getNormalProducts = async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().populate({ path: "category", select: "name description" });
   return res.status(200).json({ data: products });
 };
 
